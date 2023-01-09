@@ -45,7 +45,7 @@ const saveTodo = (text, done = 0, save = 1) => {
     }
 
     if (save) {
-        saveTodoLocalStorage({ text, done: 0 });
+        saveTodoLocalStorage({ text, done: 0, checkout: false });
     }
 
     todoList.appendChild(todo);
@@ -141,6 +141,7 @@ document.addEventListener("click", (e) => {
     const patherEl = targetEl.closest("div");
     // Pegando qual a tarefa que vou editar
     let todoTitle;
+    let checkout;
 
     if (patherEl && patherEl.querySelector("h3")) {
         todoTitle = patherEl.querySelector("h3").innerText;
@@ -148,7 +149,7 @@ document.addEventListener("click", (e) => {
 
     if(targetEl.classList.contains("finish-todo")){
         patherEl.classList.toggle("done");
-
+        localStorage.patherEl.checkout = true;
     }
 
     if (targetEl.classList.contains("edit-todo")) {
@@ -161,8 +162,10 @@ document.addEventListener("click", (e) => {
 
     if(targetEl.classList.contains("remove-todo")){
         console.log("Deu bão")
+        removeTodoLocalStorage(patherEl.querySelector("h3").innerText)
         patherEl.remove();
-    }
+        console.log(JSON.parse(localStorage.todos))
+      }
 })
 // Cancelando edição
 cancelEdit.addEventListener("click", (e) => {
@@ -231,7 +234,7 @@ searchInput.addEventListener("keyup", (e) => {
     const filteredTodos = todos.filter((todo) => todo.text != todoText);
   
     localStorage.setItem("todos", JSON.stringify(filteredTodos));
-  };
+  }
   
   const updateTodoStatusLocalStorage = (todoText) => {
     const todos = getTodosLocalStorage();
